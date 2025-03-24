@@ -4,6 +4,8 @@ from types import SimpleNamespace
 from typing import Callable, Match, Union, List, Dict
 import re
 
+from .types import Converter
+
 
 class Directive:
     def __init__(
@@ -825,3 +827,14 @@ def rst_to_markdown(text: str, extract_signature: bool = True) -> str:
     if active_parser:
         markdown += active_parser.finish_consumption(True)
     return markdown
+
+
+class ReStructuredTextConverter(Converter):
+
+    priority = 100
+
+    def can_convert(self, docstring):
+        return looks_like_rst(docstring)
+
+    def convert(self, docstring):
+        return rst_to_markdown(docstring)
