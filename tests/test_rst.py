@@ -1,6 +1,6 @@
 import pytest
 
-from docstring_to_markdown.rst import looks_like_rst, rst_to_markdown
+from docstring_to_markdown.rst import looks_like_rst, rst_to_markdown, ReStructuredTextConverter
 
 
 SEE_ALSO = """
@@ -888,3 +888,10 @@ def test_rst_to_markdown(rst, markdown):
     converted = rst_to_markdown(rst)
     print(converted)
     assert converted == markdown
+
+
+def test_converter():
+    converter = ReStructuredTextConverter()
+    assert converter.can_convert('.. versionadded:: 0.1')
+    assert not converter.can_convert('this is plain text')
+    assert converter.convert(PEP_287_CODE_BLOCK) == PEP_287_CODE_BLOCK_MARKDOWN
