@@ -534,7 +534,7 @@ class GridTableParser(TableParser):
                 self._rows.append(self._split(line))
             self._expecting_row_content = not self._expecting_row_content
         else:
-            self._state += 1
+            self._state += 1    # pragma: no cover
 
 
 class BlockParser(IParser):
@@ -653,11 +653,13 @@ class DoubleColonBlockParser(IndentedBlockParser):
         if line.strip() == '.. autosummary::':
             language = ''
             line = ''
+            suffix = ''
         else:
             line = re.sub(r'::$', '', line)
+            suffix = '\n\n'
 
         self._start_block(language)
-        return IBlockBeginning(remainder=line.rstrip() + '\n\n')
+        return IBlockBeginning(remainder=line.rstrip() + suffix)
 
 
 class MathBlockParser(IndentedBlockParser):
