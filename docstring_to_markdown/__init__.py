@@ -19,9 +19,13 @@ def _entry_points_sort_key(entry_point):
 
 
 def _load_converters() -> List[Converter]:
-    converter_entry_points = entry_points().select(
-        group="docstring_to_markdown"
-    )
+    entry_point_groups = entry_points()
+    if isinstance(entry_point_groups, dict):
+        converter_entry_points = entry_point_groups["docstring_to_markdown"]
+    else:
+        converter_entry_points = entry_point_groups.select(
+            group="docstring_to_markdown"
+        )
     # sort so that the default ones can be overridden
     sorted_entry_points = sorted(
         converter_entry_points,
