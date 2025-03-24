@@ -16,7 +16,7 @@ class UnknownFormatError(Exception):
 def _entry_points_sort_key(entry_point: 'EntryPoint'):
     if entry_point.dist is None:
         return 0
-    if entry_point.dist.name == "docstring_to_markdown":
+    if entry_point.dist.name == "docstring-to-markdown":
         return 1
     return 0
 
