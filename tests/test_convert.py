@@ -78,6 +78,9 @@ class MockEntryPoint(EntryPoint):
     def load(self):
         return self.value
 
+    # Pretend it is contributed by `importlib_metadata`
+    dist = distribution('importlib_metadata')
+
 
 class CustomCPythonConverter(CPythonConverter):
     priority = 10
@@ -117,8 +120,6 @@ def test_replacing_entry_point():
         group='docstring_to_markdown',
         value=CustomCPythonConverter
     )
-    # Pretend it is contributed by `importlib_metadata`
-    mock_entry_point.dist = distribution('importlib_metadata')
     with custom_entry_points([*original_entry_points, mock_entry_point]):
         assert convert('test') == 'test'
         assert convert(GOOGLE) == GOOGLE_MD
