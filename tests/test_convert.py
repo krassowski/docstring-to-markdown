@@ -2,7 +2,7 @@ from contextlib import contextmanager
 from docstring_to_markdown import convert, UnknownFormatError
 from docstring_to_markdown.types import Converter
 from docstring_to_markdown.cpython import CPythonConverter
-from importlib_metadata import EntryPoint, entry_points, Distribution
+from importlib_metadata import EntryPoint, entry_points, distribution
 from unittest.mock import patch
 import docstring_to_markdown
 import pytest
@@ -117,7 +117,8 @@ def test_replacing_entry_point():
         group='docstring_to_markdown',
         value=CustomCPythonConverter
     )
-    mock_entry_point.dist = Distribution()
+    # Pretend it is contributed by `importlib_metadata`
+    mock_entry_point.dist = distribution('importlib_metadata')
     with custom_entry_points([*original_entry_points, mock_entry_point]):
         assert convert('test') == 'test'
         assert convert(GOOGLE) == GOOGLE_MD
