@@ -1,7 +1,10 @@
-from importlib_metadata import EntryPoint, entry_points
-from typing import List
+from importlib_metadata import entry_points
+from typing import List, TYPE_CHECKING
 
 from .types import Converter
+
+if TYPE_CHECKING:
+    from importlib_metadata import EntryPoint
 
 __version__ = "0.15"
 
