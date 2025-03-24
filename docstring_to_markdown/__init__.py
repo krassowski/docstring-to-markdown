@@ -42,10 +42,13 @@ def _load_converters() -> List[Converter]:
     return converters
 
 
-_CONVERTERS = _load_converters()
+_CONVERTERS = None
 
 
 def convert(docstring: str) -> str:
+    global _CONVERTERS
+    if _CONVERTERS is None:
+        _CONVERTERS = _load_converters()
     for converter in _CONVERTERS:
         if converter.can_convert(docstring):
             return converter.convert(docstring)
