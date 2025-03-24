@@ -74,11 +74,17 @@ class HighPriorityConverter(Converter):
 
 
 class MockEntryPoint(EntryPoint):
-
     def load(self):
         return self.value
 
     dist = None
+
+
+class DistMockEntryPoint(MockEntryPoint):
+    # Pretend it is contributed by `pytest`.
+    # It could be anything else, but `pytest`
+    # is guaranteed to be installed during tests.
+    dist = distribution('pytest')
 
 
 class CustomCPythonConverter(CPythonConverter):
@@ -114,13 +120,11 @@ def test_adding_entry_point():
 def test_replacing_entry_point():
     assert convert(CPYTHON) == CPYTHON_MD
     original_entry_points = entry_points(group="docstring_to_markdown")
-    mock_entry_point = MockEntryPoint(
+    mock_entry_point = DistMockEntryPoint(
         name='cpython',
         group='docstring_to_markdown',
         value=CustomCPythonConverter
     )
-    # Pretend it is contributed by `importlib_metadata`
-    mock_entry_point.dist = distribution('importlib_metadata')
     with custom_entry_points([*original_entry_points, mock_entry_point]):
         assert convert('test') == 'test'
         assert convert(GOOGLE) == GOOGLE_MD
